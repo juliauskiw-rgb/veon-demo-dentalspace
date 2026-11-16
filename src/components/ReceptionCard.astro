@@ -1,0 +1,32 @@
+---
+// Signature element «картка рецепції»: phone, address, hours and the gold call button.
+// Same object in the hero, in contacts and (as a mini cell) among the doctors.
+import Icon from "./Icon.astro";
+import { clinic } from "../data/clinic";
+interface Props { variant?: "hero" | "contacts" | "mini"; class?: string; }
+const { variant = "hero", class: cls } = Astro.props;
+const hours = clinic.hours.map((h) => `${h.days} ${h.time}`).join(", ");
+---
+<div class:list={["rcard", `rcard--${variant}`, cls]}>
+  {variant === "mini" ? (
+    <>
+      <p class="rcard__title">Записатися до лікаря</p>
+      <p class="rcard__meta">{clinic.hours.map((h) => <span>{h.days} {h.time}</span>)}</p>
+      <a class="btn btn--primary btn--block" href={clinic.phone.href}><Icon name="phone" />Подзвонити</a>
+    </>
+  ) : (
+    <>
+      <a class="rcard__phone" href={clinic.phone.href} aria-label={`Подзвонити ${clinic.phone.display}`}>{clinic.phone.display}</a>
+      <p class="rcard__meta">
+        <span>{clinic.address}{variant === "contacts" && `, ${clinic.city}`}</span>
+        <span>{hours}</span>
+      </p>
+      <div class="rcard__actions">
+        <a class="btn btn--primary" href={clinic.phone.href}><Icon name="phone" class="btn__icon" />Подзвонити</a>
+        {variant === "hero" && <a class="link rcard__more" href="#consult">Що входить у консультацію</a>}
+        {variant === "contacts" && <a class="btn btn--ghost" href={clinic.map} target="_blank" rel="noopener"><Icon name="route" />Маршрут</a>}
+      </div>
+      <slot />
+    </>
+  )}
+</div>

@@ -1,0 +1,76 @@
+---
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { clinic, directions, futureNote } from "../data/clinic";
+---
+<section id="directions" class="section directions" data-rec="R-UX-8,R-UX-9,GA-R004" aria-labelledby="directions-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="directions-title" data-reveal>Вісім напрямів і ціни, з яких вони починаються</h2>
+      <p>Ціни-орієнтири з прайсу клініки. Точну вартість лікар назве після консультації.</p>
+    </div>
+    <div class="dirs" id="prices" data-dirs>
+      {directions.map((d, i) => (
+        <div class="dir" data-dir>
+          <h3 class="dir__h">
+            <button class="dir__btn" type="button" id={`dir-btn-${d.id}`} aria-expanded={i === 0 ? "true" : "false"} aria-controls={`dir-panel-${d.id}`}>
+              <span class="dir__name">{d.name}</span>
+              <span class="dir__short price">{d.short ?? "ціна за телефоном"}</span>
+              <span class="dir__chev" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="dir__panel" id={`dir-panel-${d.id}`} role="region" aria-labelledby={`dir-btn-${d.id}`} data-panel>
+            <p class="dir__panel-name" aria-hidden="true">{d.name}</p>
+            <p class="dir__summary">{d.summary}</p>
+            {d.prices.length > 0 ? (
+              <dl class="price-list">
+                {d.prices.map((p) => <div><dt>{p.label}</dt><dd class="price">{p.value}</dd></div>)}
+              </dl>
+            ) : (
+              <p class="dir__noprice">Вартість — у повному прайсі або за телефоном.</p>
+            )}
+            <div class="dir__actions">
+              <a class="btn btn--primary" href={clinic.phone.href}><Icon name="phone" />Уточнити вартість</a>
+              <FutureLink note={futureNote} class="future-link--btn">Повний прайс</FutureLink>
+            </div>
+            <p class="dir__more"><FutureLink note={futureNote}>Про напрям докладно</FutureLink></p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+<script>
+  const root = document.querySelector<HTMLElement>("[data-dirs]");
+  if (root) {
+    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-dir]"));
+    const wide = window.matchMedia("(min-width: 60rem)");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const parts = (el: HTMLElement) => ({ btn: el.querySelector<HTMLButtonElement>("button")!, panel: el.querySelector<HTMLElement>("[data-panel]")! });
+    const show = (target: HTMLElement | null, animate: boolean) => {
+      items.forEach((el) => {
+        const { btn, panel } = parts(el);
+        const open = el === target;
+        btn.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+        if (open && animate && !reduce.matches) {
+          panel.classList.remove("is-entering");
+          void panel.offsetWidth;
+          panel.classList.add("is-entering");
+        }
+      });
+    };
+    root.classList.add("is-enhanced");
+    show(items[0] ?? null, false);
+    items.forEach((el) => {
+      parts(el).btn.addEventListener("click", () => {
+        const isOpen = parts(el).btn.getAttribute("aria-expanded") === "true";
+        if (isOpen && !wide.matches) show(null, false);
+        else if (!isOpen) show(el, true);
+      });
+    });
+    wide.addEventListener("change", () => {
+      if (wide.matches && !items.some((el) => parts(el).btn.getAttribute("aria-expanded") === "true")) show(items[0] ?? null, false);
+    });
+  }
+</script>

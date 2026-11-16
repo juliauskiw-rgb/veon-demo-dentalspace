@@ -1,0 +1,76 @@
+/* Hallmark · shape: book-clinic · genre: modern-minimal · theme: custom · job: book · idea: "Простір, де все видно наперед" · vibe: "світлий, архітектурний, спокійний, відкритий, точний"
+ * paper: #EEF0ED · accent: #DAC27A · display: Geologica · body: Onest · hero: headline across ten columns, the clinic's reception wall as a full-width panorama below, the reception card overlapping its lower-left edge · nav: light sticky bar, logo, six anchors, phone as text, gold call button · footer: light surface, logo, anchors, phone, address, hours, Instagram, policy · imagery: client photos · signature: картка рецепції (phone, address, hours, gold call button) seen in the hero, in contacts and in the phone bar
+ * axes: mineral-white/geometric-light-grotesk/gold-fill · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: E (expression), the facts (500 грн, 5 років, 4,9) are set as large light-weight figures so the page has its own voice without decoration */
+/* Hallmark · dismissed 49 · checked at 390 and 1440: the button is the accordion and switcher heading of a direction, only the direction name may wrap to two lines (Естетична стоматологія at 390), the price keeps nowrap and the row stays one tap target */
+/* Line 1 of this file is the Hallmark stamp (docs/process/hallmark.md), filled from design/concept.md. */
+/* Client design tokens — only from design/concept.md (veon-concept: colors, fonts). */
+:root {
+  /* colour roles (concept.md 8.10) */
+  --color-bg: #EEF0ED;
+  --color-surface: #F9FAF8;
+  --color-text: #151817;
+  --color-muted: #545A57;
+  --color-line: #C6CBC6;
+  --color-dark: #1F2321;
+  --color-on-dark: #ECEEEA;
+  --color-on-dark-muted: #A6ACA8;
+  --color-accent: #DAC27A;
+  --color-accent-hover: #CFB565;
+  --color-accent-ink: #151817;
+  --color-on-accent: var(--color-accent-ink);
+  --color-accent-border: #6B571B;
+  --color-accent-text: #6B571B;
+  --color-focus: #151817;
+  --color-focus-dark: #DAC27A;
+  --color-scrim: rgb(21 24 23 / 0.06);
+
+  /* type */
+  --font-display: "Geologica", system-ui, sans-serif;
+  --font-body: "Onest", system-ui, sans-serif;
+  --fs-caption: 0.8125rem;   /* 13 */
+  --fs-body: 1rem;           /* 16 */
+  --fs-lead: 1.25rem;        /* 20 */
+  --fs-h3: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);      /* 22 → 28 */
+  --fs-h2: clamp(1.875rem, 1.4rem + 1.7vw, 2.75rem);      /* 30 → 44 */
+  --fs-h1: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);       /* 36 → 76 */
+  --fs-figure: clamp(3.25rem, 1.8rem + 4.6vw, 4.75rem);   /* 52 → 76 */
+  --fs-figure-xl: clamp(4.5rem, 1.4rem + 10vw, 10rem);    /* 72 → 160 */
+  --lh-tight: 1.05;
+  --lh-head: 1.15;
+  --lh-body: 1.55;
+
+  /* spacing rhythm of 8 */
+  --s-1: 0.5rem;   /* 8 */
+  --s-2: 1rem;     /* 16 */
+  --s-3: 1.5rem;   /* 24 */
+  --s-4: 2rem;     /* 32 */
+  --s-5: 3rem;     /* 48 */
+  --s-6: 4.5rem;   /* 72 */
+  --s-7: 7rem;     /* 112 */
+  --section-gap: clamp(4.5rem, 0.5rem + 8vw, 7.5rem);
+  --space: clamp(1.25rem, 0.2rem + 4.4vw, 5rem); /* side fields 20 → 80 */
+  --gutter: 1.5rem;
+  --container: 80rem; /* 1280 */
+
+  --radius: 2px;
+  --header-h: 4rem;
+  --bar-h: 4.5rem;
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-in: cubic-bezier(.5, 0, .75, 0);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 200ms;
+  --dur-panel: 240ms;
+  --dur: 500ms;
+  --dur-open: 800ms;
+}
+
+@media (min-width: 60rem) {
+  :root { --header-h: 5rem; }
+}
+@media (max-width: 39.99rem) {
+  :root { --dur: 350ms; --dur-open: 600ms; --dur-panel: 200ms; }
+}

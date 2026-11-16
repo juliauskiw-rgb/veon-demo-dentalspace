@@ -1,0 +1,28 @@
+---
+import { Picture } from "astro:assets";
+import Icon from "./Icon.astro";
+import { clinic } from "../data/clinic";
+import photo from "../assets/img/consult-microscope.jpg";
+---
+<section id="consult" class="section consult" data-rec="R-UX-8,S-R014" aria-labelledby="consult-title">
+  <div class="container consult__grid">
+    <div class="consult__text">
+      <h2 id="consult-title" class="consult__title" data-reveal>
+        <span class="h2-line">Перший крок — консультація за</span>
+        <span class="figure figure--l">500 грн</span>
+      </h2>
+      <p class="consult__lead">Фотопротокол і розбір КТ. Після консультації ви знаєте варіанти лікування і з чого почати.</p>
+      <dl class="price-list">
+        <div><dt>Консультація (фотопротокол, розбір КТ)</dt><dd class="price">500 грн</dd></div>
+        <div><dt>Цифрове моделювання посмішки</dt><dd class="price">2000 грн</dd></div>
+      </dl>
+      <a class="btn btn--primary btn--lg consult__cta" href={clinic.phone.href}><Icon name="phone" />Записатися на консультацію</a>
+    </div>
+    <figure class="consult__photo">
+      <Picture src={photo} formats={["webp"]} widths={[400, 600, 900, 1170]} sizes="(min-width: 60rem) 40vw, 100vw" alt="Лікарі Dental Space працюють з пацієнткою під мікроскопом" loading="lazy" />
+    </figure>
+  </div>
+</section>
+<style>
+  .consult__cta { white-space: nowrap; }
+</style>

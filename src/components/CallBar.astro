@@ -1,0 +1,25 @@
+---
+// Phone-only bottom bar: call + route, appears once the hero has left the screen (R-UX-2).
+import Icon from "./Icon.astro";
+import { clinic } from "../data/clinic";
+---
+<div class="callbar dark" data-callbar data-rec="R-UX-2,GA-R003,MA-R004">
+  <a class="btn btn--primary" href={clinic.phone.href}><Icon name="phone" />Подзвонити</a>
+  <a class="btn btn--ghost-dark" href={clinic.map} target="_blank" rel="noopener"><Icon name="route" />Маршрут</a>
+</div>
+<script>
+  const bar = document.querySelector<HTMLElement>("[data-callbar]");
+  const hero = document.getElementById("hero");
+  if (bar && hero && "IntersectionObserver" in window) {
+    const set = (shown: boolean) => {
+      bar.classList.toggle("is-shown", shown);
+      if (shown) bar.removeAttribute("inert");
+      else bar.setAttribute("inert", "");
+    };
+    set(false);
+    new IntersectionObserver((entries) => {
+      const e = entries[0];
+      if (e) set(!e.isIntersecting);
+    }, { threshold: 0 }).observe(hero);
+  }
+</script>

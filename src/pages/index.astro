@@ -1,0 +1,61 @@
+---
+import { getImage } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import ReceptionCard from "../components/ReceptionCard.astro";
+import Consult from "../components/Consult.astro";
+import Directions from "../components/Directions.astro";
+import Doctors from "../components/Doctors.astro";
+import Trust from "../components/Trust.astro";
+import Reviews from "../components/Reviews.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import CallBar from "../components/CallBar.astro";
+import { clinic } from "../data/clinic";
+import heroWide from "../assets/img/hero-reception-wide.jpg";
+import heroTall from "../assets/img/hero-reception-tall.jpg";
+
+const wideWidths = [768, 1280, 1600, 2160, 2560];
+const tallWidths = [390, 600, 780, 1080];
+const wide = await Promise.all(wideWidths.map((w) => getImage({ src: heroWide, width: w, format: "webp", quality: 78 })));
+const tall = await Promise.all(tallWidths.map((w) => getImage({ src: heroTall, width: w, format: "webp", quality: 78 })));
+const wideSrcset = wide.map((img, i) => `${img.src} ${wideWidths[i]}w`).join(", ");
+const tallSrcset = tall.map((img, i) => `${img.src} ${tallWidths[i]}w`).join(", ");
+const heroFallback = wide[1]!;
+
+const title = "Стоматологічна клініка в Івано-Франківську | Dental Space";
+const description = "Dental Space — клініка естетичної стоматології на вул. Хіміків, 3б в Івано-Франківську. Цифрова діагностика, гарантія 5 років. Консультація — 500 грн.";
+---
+<Base lang="uk" title={title} description={description}>
+  <Header slot="header" />
+
+  <section id="hero" class="hero" data-rec="R-UX-1,R-UX-10,R-SP-2,R-SP-4,R-SP-6,R-SP-7" aria-labelledby="hero-title">
+    <div class="container">
+      <div class="hero__head">
+        <h1 id="hero-title" class="hero__title">
+          <span class="hero__lead">Dental Space —</span>
+          <span class="hero__main">клініка естетичної стоматології в Івано-Франківську</span>
+        </h1>
+        <p class="hero__slogan">{clinic.slogan}</p>
+      </div>
+      <div class="hero__stage">
+        <figure class="hero__photo">
+          <picture>
+            <source media="(min-width: 40rem)" srcset={wideSrcset} sizes="(min-width: 80rem) 1280px, calc(100vw - 6rem)" type="image/webp" />
+            <source srcset={tallSrcset} sizes="calc(100vw - 2.5rem)" type="image/webp" />
+            <img src={heroFallback.src} width="2560" height="975" alt="Рецепція Dental Space: стіна з ламелями та вивіскою «Dental Space, клініка естетичної стоматології»" fetchpriority="high" decoding="async" />
+          </picture>
+        </figure>
+        <ReceptionCard variant="hero" class="hero__card" />
+      </div>
+    </div>
+  </section>
+  <Consult />
+  <Directions />
+  <Doctors />
+  <Trust />
+  <Reviews />
+  <Contacts />
+  <Footer slot="footer" />
+  <CallBar slot="footer" />
+</Base>

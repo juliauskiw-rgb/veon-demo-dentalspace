@@ -1,0 +1,62 @@
+---
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import logo from "../assets/img/logo.png";
+import { clinic, nav } from "../data/clinic";
+const hours = clinic.hours.map((h) => `${h.days} ${h.time}`).join(", ");
+---
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a class="site-header__logo" href="#top" aria-label="Dental Space, на початок сторінки">
+      <Image src={logo} alt="Dental Space — клініка естетичної стоматології" width={164} height={40} loading="eager" class="logo-img" />
+    </a>
+    <nav class="site-nav" aria-label="Розділи сторінки">
+      <ul>{nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+    </nav>
+    <div class="site-header__actions" data-rec="R-UX-1,R-UX-2">
+      <a class="site-header__phone" href={clinic.phone.href}>{clinic.phone.display}</a>
+      <a class="btn btn--primary site-header__cta" href={clinic.phone.href}>Записатися</a>
+      <a class="icon-btn site-header__call" href={clinic.phone.href} aria-label={`Подзвонити ${clinic.phone.display}`}><Icon name="phone" size={22} /></a>
+      <button class="icon-btn site-header__burger" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+        <Icon name="menu" size={22} class="i-open" /><Icon name="close" size={22} class="i-close" />
+        <span class="visually-hidden">Меню</span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
+    <nav aria-label="Меню">
+      <ul>{nav.map((n) => <li><a href={n.href} data-menu-link>{n.label}</a></li>)}</ul>
+    </nav>
+    <div class="mobile-menu__foot">
+      <a class="btn btn--primary btn--block btn--lg" href={clinic.phone.href}><Icon name="phone" />Подзвонити</a>
+      <p>{clinic.address}, {clinic.city}<br />{hours}</p>
+    </div>
+  </div>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = document.querySelector<HTMLElement>("[data-menu]");
+  const header = document.querySelector<HTMLElement>("[data-header]");
+  if (toggle && menu && header) {
+    const focusables = () => Array.from(header.querySelectorAll<HTMLElement>("a[href], button")).filter((el) => el.offsetParent !== null);
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      menu.hidden = !open;
+      document.documentElement.classList.toggle("menu-open", open);
+      if (open) menu.querySelector<HTMLElement>("a")?.focus();
+    };
+    toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+    menu.querySelectorAll("[data-menu-link]").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+    document.addEventListener("keydown", (e) => {
+      if (toggle.getAttribute("aria-expanded") !== "true") return;
+      if (e.key === "Escape") { setOpen(false); toggle.focus(); return; }
+      if (e.key === "Tab") {
+        const list = focusables();
+        const first = list[0], last = list[list.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      }
+    });
+    window.matchMedia("(min-width: 75rem)").addEventListener("change", (m) => { if (m.matches) setOpen(false); });
+  }
+</script>

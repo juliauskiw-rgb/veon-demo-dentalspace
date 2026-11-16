@@ -1,0 +1,32 @@
+---
+import { Picture } from "astro:assets";
+import FutureLink from "./FutureLink.astro";
+import { comfort, futureNote, tech } from "../data/clinic";
+import coffee from "../assets/img/trust-coffee.jpg";
+---
+<section id="trust" class="section trust" data-rec="R-UX-7" aria-labelledby="trust-title">
+  <div class="container">
+    <h2 id="trust-title" class="trust__title" data-reveal>
+      <span class="figure figure--xl">5 років</span>
+      <span class="h2-line">офіційної гарантії на всі виконані роботи</span>
+    </h2>
+    <div class="trust__grid">
+      <div class="trust__col">
+        <h3>Технології</h3>
+        <ul class="facts" role="list">
+          {tech.map((t) => <li><span class="facts__name">{t.name}</span><span class="facts__text">{t.text}</span></li>)}
+        </ul>
+      </div>
+      <div class="trust__col">
+        <h3>Комфорт під час лікування</h3>
+        <ul class="facts facts--plain" role="list">
+          {comfort.map((c) => <li><span class="facts__name">{c}</span></li>)}
+        </ul>
+        <FutureLink note={futureNote}>Детальніше про клініку</FutureLink>
+      </div>
+      <figure class="trust__photo">
+        <Picture src={coffee} formats={["webp"]} widths={[360, 540, 800, 1200]} sizes="(min-width: 60rem) 25vw, 100vw" alt="Кава для пацієнта на підносі з ложечкою Dental Space" loading="lazy" />
+      </figure>
+    </div>
+  </div>
+</section>
